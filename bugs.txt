@@ -1,0 +1,288 @@
+🔎 TaskFlow – Issues & UX Audit Report
+1️⃣ Functional / Logic Problems
+1. Dashboard Metrics Inconsistency
+
+“Projets actifs: 4”
+
+“Mes tâches: 0”
+
+“Tâches en retard: 0”
+
+“À venir cette semaine: 0”
+
+Problem:
+All projects show “0 tâches”.
+This makes the dashboard partially meaningless since:
+
+A collaborative task manager without tasks is not realistic.
+
+The dashboard KPIs are not validated against actual project data.
+
+Potential Issue:
+
+Tasks are not properly linked to projects.
+
+Aggregation logic for statistics may be incorrect or incomplete.
+
+User-task assignment logic may not be implemented.
+
+2. Mes Tâches Page – Empty State Problem
+
+Message:
+
+“Aucune tâche assignée.”
+
+Problem:
+No call-to-action is provided.
+
+UX Gap:
+
+No button like:
+
+“Voir tous les projets”
+
+“Créer une tâche”
+
+“Demander une assignation”
+
+This creates a dead-end screen.
+
+3. Projects Page – Blue Dot Indicator
+
+Each project card shows a blue dot (top-right).
+
+Problem:
+There is no legend explaining what the blue dot means.
+
+UX Issue:
+Users cannot interpret:
+
+Is it active?
+
+Has unread updates?
+
+Is it selected?
+
+This is ambiguous UI signaling.
+
+4. Profile Page – Weak Information Hierarchy
+
+Issues:
+
+Avatar is static (just initial “C”).
+
+No ability to upload/change photo.
+
+Email displayed twice (header + detail).
+
+No security settings (password, 2FA, etc.)
+
+UX Impact:
+Profile page feels incomplete and not production-ready.
+
+2️⃣ UI Consistency Issues
+1. Language Mixing
+
+UI is French:
+
+Dashboard
+
+Mes tâches
+
+Profil
+
+Déconnexion
+
+But:
+
+Project names: “frontend”, “backend”, “full stack”
+
+Descriptions partially French
+
+Issue:
+Language consistency is not enforced.
+
+You must:
+
+Either use full French UI
+
+Or allow language switching (i18n)
+
+2. Button Hierarchy Problem
+
+Examples:
+
+“Déconnexion” button is very visually dominant (red, strong).
+
+“Nouveau projet” is secondary blue.
+
+UX principle violation:
+Destructive action (logout) should not dominate over primary workflow action (create project).
+
+3. Spacing & Layout Density
+
+Projects grid:
+
+Uneven whitespace.
+
+Last row has only one card → breaks symmetry.
+
+No responsive breakpoint adaptation shown.
+
+Could cause:
+
+Poor mobile experience.
+
+Visual imbalance.
+
+3️⃣ UX & Product Design Issues
+1. No Activity Feedback
+
+There is:
+
+No recent activity
+
+No notifications
+
+No collaboration indicators
+
+No task progress bars
+
+For a collaborative tool, this reduces engagement.
+
+2. No Project Progress Visualization
+
+Each project card only shows:
+
+Title
+
+Description
+
+“0 tâches”
+
+“Actif”
+
+Missing:
+
+Progress %
+
+Completed vs Pending
+
+Deadline
+
+Assigned members
+
+Last updated
+
+This makes project cards low-information density.
+
+3. Missing Navigation Context
+
+Navigation has:
+
+Dashboard
+
+Projets
+
+Mes tâches
+
+Profil
+
+But:
+
+No active state highlight shown.
+
+No breadcrumbs.
+
+No visual indicator of current page (weak UX clarity).
+
+4. Search UX is Underpowered
+
+Search bar:
+
+“Rechercher un projet…”
+
+Problems:
+
+No filter by status.
+
+No sorting.
+
+No debounce UX.
+
+No empty-state message if no results.
+
+4️⃣ Architecture-Level Observations (Important)
+
+This looks like:
+
+UI-first implementation
+
+Minimal domain modeling
+
+Missing enterprise-grade features:
+
+Role-based access (admin/member)
+
+Project membership management
+
+Task ownership logic
+
+Real-time updates
+
+Notifications
+
+If this is your MERN project, you need:
+
+Proper schema relationships:
+
+User → Projects (many-to-many)
+
+Project → Tasks (one-to-many)
+
+Task → Assigned User (many-to-one)
+
+Aggregation pipelines for dashboard KPIs.
+
+🧠 Strategic UX Improvements
+Priority Fixes
+
+Add proper task creation & assignment flow.
+
+Add meaningful empty states with CTA.
+
+Add progress indicators on project cards.
+
+Clarify visual indicators (blue dot).
+
+Improve dashboard analytics.
+
+Mid-Level Improvements
+
+Add filtering & sorting.
+
+Add language consistency.
+
+Improve active navigation highlight.
+
+Advanced Improvements
+
+Real-time collaboration (Socket.io).
+
+Notifications.
+
+Role-based permissions.
+
+Project analytics panel.
+
+🎯 Final Evaluation
+
+Current state:
+✅ Clean UI
+✅ Good spacing & modern design
+❌ Weak product logic
+❌ Incomplete user flows
+❌ Low information density
+❌ No engagement mechanics
+
+It looks like a frontend MVP, not yet a production-ready collaborative system.

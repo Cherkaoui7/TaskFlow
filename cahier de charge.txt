@@ -1,0 +1,885 @@
+Projet : TaskFlow - Plateforme de gestion collaborative de projets
+Version : 1.0
+Date : 18 février 2026
+Auteur : Étudiant OFPPT - Développement Full Stack
+Technologies : React.js (Frontend) + Laravel (Backend API REST)
+Dans le cadre de la formation OFPPT en développement full stack, ce
+projet vise à créer une application web moderne permettant aux
+équipes de gérer efficacement leurs projets et tâches. L'application
+s'inspire de solutions existantes comme Trello, Asana ou Jira, mais en
+version simplifiée et adaptée aux petites équipes[1][2].
+Le besoin émane de la nécessité croissante des équipes de travail,
+qu'elles soient en entreprise, en freelance ou dans le cadre d'études,
+de disposer d'un outil centralisé pour organiser leurs projets, suivre
+l'avancement des tâches et collaborer efficacement[1][3].
+Objectifs fonctionnels :
+Permettre la création et la gestion de projets multiples par
+utilisateur
+Faciliter l'organisation des tâches avec un système de statuts (À
+faire, En cours, Terminé)
+Offrir une interface intuitive type Kanban pour visualiser
+l'avancement
+Assurer la collaboration entre membres d'un même projet
+Gérer les priorités et les deadlines des tâches
+Cahier des Charges - Application
+de Gestion de Projets et Tâches
+1. Présentation du Projet
+1.1 Contexte
+1.2 Objectifs du Projet
+Objectifs techniques :
+Développer une API REST complète avec Laravel 11
+Créer une interface utilisateur moderne et réactive avec React 18
+Implémenter un système d'authentification sécurisé (JWT ou
+Laravel Sanctum)
+Appliquer les bonnes pratiques de développement (architecture
+MVC, composants réutilisables)
+Déployer l'application sur un environnement de production[2]
+[3]
+Objectifs pédagogiques :
+Démontrer la maîtrise du stack React + Laravel
+Pratiquer la conception et l'intégration d'une API RESTful
+Appliquer les principes de gestion d'état (Context API ou Redux)
+Mettre en œuvre les migrations, seeders et relations Eloquent
+Créer un projet portfolio professionnellement présentable
+Inclus dans le périmètre :
+Authentification et gestion des utilisateurs
+CRUD complet sur les projets et tâches
+Système de filtrage et recherche
+Attribution de tâches aux membres
+Vue Kanban et vue liste
+Notifications de base (toasts)
+Interface responsive (desktop et mobile)
+Exclus du périmètre (futures évolutions) :
+Messagerie instantanée intégrée
+Système de paiement ou abonnements
+Notifications push temps réel (WebSockets)
+Application mobile native
+Intégrations tierces (Slack, Google Calendar)
+Système de rapports avancés avec graphiques complexes
+1.3 Périmètre du Projet
+Persona 1 : Chef de projet
+Âge : 30-45 ans
+Besoin : Superviser plusieurs projets simultanément, assigner
+des tâches, suivre les deadlines
+Compétences techniques : Moyennes
+Attentes : Vue d'ensemble claire, filtres efficaces, gestion des
+membres
+Persona 2 : Développeur / Designer
+Âge : 22-35 ans
+Besoin : Consulter ses tâches assignées, mettre à jour les statuts,
+respecter les priorités
+Compétences techniques : Élevées
+Attentes : Interface rapide, navigation fluide, indicateurs visuels
+clairs
+Persona 3 : Étudiant en gestion de projet
+Âge : 18-25 ans
+Besoin : Organiser les projets d'équipe, coordonner les livrables
+académiques
+Compétences techniques : Variables
+Attentes : Simplicité d'utilisation, accessibilité, gratuité
+Connexion internet requise (application web)
+Navigateurs supportés : Chrome, Firefox, Safari, Edge (versions
+récentes)
+Écrans : Desktop (1920×1080), Tablette (768px+), Mobile
+(375px+)
+Accessibilité : Respecter les normes WCAG 2.1 niveau A
+minimum[2][3]
+2. Cibles et Utilisateurs
+2.1 Personas
+2.2 Contraintes Utilisateurs
+F1.1 - Inscription utilisateur
+L'utilisateur peut créer un compte avec : nom, prénom, email,
+mot de passe
+Validation côté frontend (format email, longueur mot de passe
+min. 8 caractères)
+Validation côté backend (unicité email, hachage mot de passe
+avec bcrypt)
+Message de confirmation après inscription réussie
+Redirection automatique vers la page de connexion
+F1.2 - Connexion utilisateur
+L'utilisateur se connecte avec email et mot de passe
+Génération d'un token JWT ou Sanctum en cas de succès
+Token stocké côté client (localStorage ou httpOnly cookie)
+Redirection vers le dashboard après connexion
+Gestion des erreurs (identifiants incorrects, compte inexistant)
+F1.3 - Déconnexion
+Bouton de déconnexion accessible depuis le header
+Suppression du token côté client
+Invalidation du token côté serveur (optionnel selon méthode)
+Redirection vers la page de connexion
+F1.4 - Mot de passe oublié (optionnel v1, prioritaire v2)
+Formulaire de réinitialisation avec email
+Envoi d'un lien de réinitialisation par email
+Page de saisie du nouveau mot de passe avec token de validation
+Expiration du token après 1 heure
+3. Spécifications Fonctionnelles
+3.1 Module Authentification
+F2.1 - Création de projet
+Formulaire de création avec champs obligatoires :
+Nom du projet (max 100 caractères)
+Description (textarea, max 500 caractères)
+Date de début et date de fin prévisionnelle
+Couleur ou icône de projet (optionnel)
+Validation des données (dates cohérentes, champs non vides)
+Message de confirmation après création
+L'utilisateur créateur devient administrateur du projet
+F2.2 - Liste des projets
+Affichage de tous les projets de l'utilisateur connecté
+Vue en grille (cards) avec :
+Nom du projet
+Description tronquée (50 premiers caractères)
+Nombre de tâches par statut (compteurs)
+Date limite
+Couleur ou icône du projet
+Possibilité de filtrer par : statut global (actif, archivé), date, nom
+Barre de recherche sur le nom du projet
+Pagination (20 projets par page)
+F2.3 - Affichage détail d'un projet
+Page dédiée affichant :
+Informations complètes du projet
+Liste des membres avec rôles
+Liste des tâches (vue par défaut : Kanban)
+Boutons d'action (modifier, archiver, supprimer)
+Onglets pour alterner entre vue Kanban et vue liste
+F2.4 - Modification d'un projet
+Seul l'administrateur du projet peut modifier
+Formulaire pré-rempli avec les données existantes
+Même validation qu'à la création
+Historique des modifications (optionnel v2)
+3.2 Module Gestion des Projets
+F2.5 - Suppression d'un projet
+Seul l'administrateur peut supprimer
+Modal de confirmation avant suppression définitive
+Suppression en cascade de toutes les tâches associées
+Message de confirmation après suppression
+F2.6 - Gestion des membres
+Ajouter un membre via email ou recherche utilisateur
+Retirer un membre du projet (sauf l'admin)
+Assigner un rôle : Administrateur ou Membre
+Notification par email lors de l'ajout à un projet (optionnel v2)
+F3.1 - Création de tâche
+Formulaire de création avec champs :
+Titre de la tâche (obligatoire, max 150 caractères)
+Description détaillée (optionnelle, max 1000 caractères)
+Statut : À faire, En cours, Terminé (par défaut : À faire)
+Priorité : Basse, Moyenne, Haute, Critique
+Date limite (optionnelle)
+Membre assigné (sélection parmi les membres du projet)
+Tags/catégories (optionnel v2)
+Validation des données
+Tâche créée dans le projet actuel
+Message de confirmation
+F3.2 - Liste des tâches (vue Kanban)
+Affichage en colonnes : À faire | En cours | Terminé
+Chaque card de tâche affiche :
+Titre de la tâche
+Priorité (code couleur)
+Membre assigné (avatar ou initiales)
+Date limite (si définie)
+Nombre de commentaires (optionnel v2)
+Drag & drop pour changer le statut (optionnel mais
+recommandé)
+3.3 Module Gestion des Tâches
+Scroll vertical si nombreuses tâches dans une colonne
+F3.3 - Liste des tâches (vue liste)
+Tableau avec colonnes : Titre | Statut | Priorité | Assigné à |
+Date limite | Actions
+Filtres disponibles :
+Par statut (checkboxes)
+Par priorité (checkboxes)
+Par membre assigné (dropdown)
+Par date limite (plage de dates)
+Tri possible sur chaque colonne
+Pagination (50 tâches par page)
+F3.4 - Affichage détail d'une tâche
+Modal ou page dédiée affichant :
+Toutes les informations de la tâche
+Historique des modifications (qui, quand, quoi - optionnel
+v2)
+Section commentaires (optionnel v2)
+Pièces jointes (optionnel v2)
+Boutons d'action : Modifier, Supprimer, Changer statut
+F3.5 - Modification de tâche
+Tous les membres du projet peuvent modifier une tâche
+Formulaire pré-rempli
+Même validation qu'à la création
+Mise à jour instantanée dans la vue Kanban/liste
+F3.6 - Suppression de tâche
+Modal de confirmation avant suppression
+Seuls l'admin du projet ou le créateur de la tâche peuvent
+supprimer
+Message de confirmation
+F3.7 - Changement rapide de statut
+Depuis la vue Kanban : drag & drop entre colonnes
+Depuis la vue liste : dropdown dans la ligne du tableau
+Depuis le détail de la tâche : boutons d'action rapide
+Mise à jour instantanée sans rechargement de page
+F4.1 - Vue d'ensemble
+Page d'accueil après connexion
+Widgets affichant :
+Nombre total de projets actifs
+Nombre de tâches assignées à l'utilisateur
+Tâches en retard (date limite dépassée)
+Tâches à venir cette semaine
+Liste des 5 derniers projets consultés (accès rapide)
+F4.2 - Mes tâches
+Page dédiée listant toutes les tâches assignées à l'utilisateur
+connecté
+Vue par défaut : triées par date limite (proche en premier)
+Filtres : par statut, par projet, par priorité
+Vue calendrier des deadlines (optionnel v2)
+F5.1 - Consultation du profil
+Page affichant : nom, prénom, email, photo de profil, date
+d'inscription
+Statistiques personnelles : nombre de projets, tâches complétées,
+taux de réalisation
+F5.2 - Modification du profil
+Formulaire de modification : nom, prénom, photo de profil
+Upload d'image avec validation (formats : jpg, png, max 2 Mo)
+Impossible de modifier l'email (sécurité)
+F5.3 - Changement de mot de passe
+Formulaire dédié : ancien mot de passe, nouveau mot de passe,
+confirmation
+3.4 Module Dashboard
+3.5 Module Profil Utilisateur
+Validation : ancien mot de passe correct, nouveau différent, min.
+8 caractères
+Message de confirmation après changement
+Type d'application : Single Page Application (SPA) avec API REST
+Séparation des responsabilités :
+Frontend (React) : Interface utilisateur, routage, gestion d'état,
+appels API
+Backend (Laravel) : API REST, logique métier, gestion BDD,
+authentification
+Base de données (MySQL/PostgreSQL) : Stockage des données
+Communication : Frontend consomme l'API via requêtes HTTP (GET,
+POST, PUT, DELETE) en JSON
+Version : Laravel 11.x
+Base de données : MySQL 8.0+ ou PostgreSQL 13+
+Authentification : Laravel Sanctum (tokens API) ou JWT[2][3]
+Table : users
+id (bigint, PK, auto-increment)
+name (string, 100)
+email (string, 100, unique)
+password (string, hashed)
+profile_picture (string, nullable)
+email_verified_at (timestamp, nullable)
+remember_token (string, nullable)
+created_at, updated_at (timestamps)
+Table : projects
+4. Spécifications Techniques
+4.1 Architecture Globale
+4.2 Backend - Laravel API
+4.2.1 Structure des données (Migrations)
+id (bigint, PK, auto-increment)
+name (string, 100)
+description (text, nullable)
+start_date (date)
+end_date (date, nullable)
+color (string, 7, nullable) // Code couleur hex
+status (enum: 'active', 'archived', default: 'active')
+user_id (FK vers users, créateur du projet)
+created_at, updated_at (timestamps)
+Table : project_user (pivot table)
+id (bigint, PK, auto-increment)
+project_id (FK vers projects)
+user_id (FK vers users)
+role (enum: 'admin', 'member', default: 'member')
+created_at, updated_at (timestamps)
+Contrainte : unique(project_id, user_id)
+Table : tasks
+id (bigint, PK, auto-increment)
+title (string, 150)
+description (text, nullable)
+status (enum: 'todo', 'in_progress', 'done', default: 'todo')
+priority (enum: 'low', 'medium', 'high', 'critical', default:
+'medium')
+due_date (date, nullable)
+project_id (FK vers projects)
+assigned_to (FK vers users, nullable)
+created_by (FK vers users)
+created_at, updated_at (timestamps)
+Table : comments (optionnel v2)
+id (bigint, PK, auto-increment)
+content (text)
+task_id (FK vers tasks)
+user_id (FK vers users)
+created_at, updated_at (timestamps)
+Relations Eloquent :
+User hasMany Projects (créés)
+User belongsToMany Projects (via project_user)
+Project belongsToMany Users (via project_user)
+Project hasMany Tasks
+Task belongsTo Project
+Task belongsTo User (assigned_to)
+Task belongsTo User (created_by)
+Task hasMany Comments (optionnel v2)
+Authentification (publiques) :
+POST /api/register - Inscription
+POST /api/login - Connexion
+POST /api/logout - Déconnexion (protégée)
+POST /api/forgot-password - Demande réinitialisation (optionnel)
+POST /api/reset-password - Réinitialisation (optionnel)
+Projets (protégées, authentification requise) :
+GET /api/projects - Liste des projets de l'utilisateur
+POST /api/projects - Créer un projet
+GET /api/projects/{id} - Détail d'un projet
+PUT /api/projects/{id} - Modifier un projet
+DELETE /api/projects/{id} - Supprimer un projet
+POST /api/projects/{id}/members - Ajouter un membre
+DELETE /api/projects/{id}/members/{userId} - Retirer un
+membre
+Tâches (protégées) :
+GET /api/projects/{id}/tasks - Liste des tâches d'un projet
+POST /api/projects/{id}/tasks - Créer une tâche
+GET /api/tasks/{id} - Détail d'une tâche
+PUT /api/tasks/{id} - Modifier une tâche
+PATCH /api/tasks/{id}/status - Changer uniquement le statut
+DELETE /api/tasks/{id} - Supprimer une tâche
+GET /api/my-tasks - Toutes les tâches assignées à l'utilisateur
+connecté
+4.2.2 Routes API
+Utilisateur (protégées) :
+GET /api/user - Profil de l'utilisateur connecté
+PUT /api/user/profile - Modifier le profil
+PUT /api/user/password - Changer le mot de passe
+POST /api/user/avatar - Upload photo de profil
+Validation des requêtes :
+Utilisation de Form Requests Laravel pour chaque endpoint
+modifiant des données
+Messages d'erreur en français
+Retour JSON standardisé : { "message": "...", "errors": {...} }
+Middleware :
+auth:sanctum ou auth:api pour protéger les routes
+Middleware personnalisé pour vérifier l'appartenance au projet
+avant modification
+Rate limiting : 60 requêtes par minute par utilisateur
+Sécurité :
+Hachage des mots de passe avec bcrypt
+Protection CSRF (si cookies)
+Validation stricte des entrées (prevention XSS, injection SQL via
+Eloquent)
+CORS configuré pour autoriser uniquement le domaine frontend
+Headers de sécurité (Helmet.js équivalent Laravel)
+Seeders pour environnement de développement :
+UsersSeeder : 10 utilisateurs de test
+ProjectsSeeder : 5 projets avec relations
+TasksSeeder : 50 tâches réparties dans les projets
+Factories :
+UserFactory
+4.2.3 Validation et Sécurité
+4.2.4 Seeders et Factories
+ProjectFactory
+TaskFactory
+Commande de seeding : php artisan db:seed
+Version : React 18.x
+Build tool : Vite 5.x
+Gestion d'état : Context API (ou Redux si complexité accrue)
+Routage : React Router v6
+Requêtes HTTP : Axios
+Styling : Tailwind CSS 3.x ou Material-UI (MUI)
+src/
+├── components/ # Composants réutilisables
+│ ├── common/ # Boutons, Inputs, Modals, Loaders
+│ ├── layout/ # Header, Sidebar, Footer
+│ ├── projects/ # ProjectCard, ProjectForm, ProjectList
+│ └── tasks/ # TaskCard, TaskForm, KanbanBoard
+├── pages/ # Pages principales
+│ ├── Auth/ # Login, Register, ForgotPassword
+│ ├── Dashboard/ # Dashboard, MyTasks
+│ ├── Projects/ # ProjectsList, ProjectDetail
+│ └── Profile/ # Profile, EditProfile
+├── context/ # Context API (AuthContext, ProjectContext)
+├── hooks/ # Custom hooks (useAuth, useFetch)
+├── services/ # API calls (authService, projectService, taskService)
+├── utils/ # Fonctions utilitaires (formatDate, validation)
+├── assets/ # Images, icônes
+├── App.jsx # Composant racine avec routes
+└── main.jsx # Point d'entrée
+AuthContext (Context API) :
+Gère l'état global de l'utilisateur connecté
+Fournit les fonctions : login, logout, register
+Stocke le token dans localStorage
+4.3 Frontend - React
+4.3.1 Structure de dossiers
+4.3.2 Composants clés
+Vérifie automatiquement le token au chargement de l'app
+ProtectedRoute (composant HOC) :
+Vérifie si l'utilisateur est authentifié
+Redirige vers /login si non authentifié
+Enveloppe toutes les routes privées
+ProjectCard (composant) :
+Affiche une card de projet avec nom, description, compteurs
+Props : project (objet), onClick (fonction)
+KanbanBoard (composant) :
+Affiche 3 colonnes : À faire, En cours, Terminé
+Intègre drag & drop (react-beautiful-dnd ou dnd-kit)
+Props : tasks (array), onStatusChange (fonction)
+TaskCard (composant) :
+Affiche une card de tâche avec titre, priorité, assigné, deadline
+Props : task (objet), onClick (fonction)
+Modal (composant réutilisable) :
+Modal générique pour formulaires et confirmations
+Props : isOpen (bool), onClose (fonction), title (string), children
+Configuration Axios :
+Base URL : http://localhost:8000/api (dev) ou URL de production
+Intercepteur pour ajouter automatiquement le token dans les
+headers
+Intercepteur pour gérer les erreurs 401 (déconnexion
+automatique)
+Services API :
+4.3.3 Gestion des appels API
+• authService.js : login(), register(), logout(), getUser()
+Exemple d'appel :
+// Dans un composant
+const { data, loading, error } = useFetch(() =>
+projectService.getProjects());
+Breakpoints Tailwind CSS :
+Mobile : < 640px (sm)
+Tablette : 640px - 1024px (md, lg)
+Desktop : > 1024px (xl, 2xl)
+Adaptations :
+Navigation : Burger menu sur mobile, sidebar fixe sur desktop
+Kanban : Scroll horizontal sur mobile, colonnes côte à côte sur
+desktop
+Formulaires : Pleine largeur sur mobile, modals centrées sur
+desktop
+Développement :
+Backend : Laravel Sail (Docker) ou XAMPP/MAMP + PHP 8.2+
+Frontend : Vite dev server (npm run dev)
+Base de données : MySQL dans Docker ou local
+Production (recommandations) :
+Backend : Serveur Linux (Ubuntu 22.04), Nginx, PHP-FPM
+Frontend : Hébergement static (Netlify, Vercel) ou même serveur
+que backend
+Base de données : MySQL 8.0 ou PostgreSQL sur serveur dédié
+ou cloud (AWS RDS, DigitalOcean)
+Domaine : HTTPS obligatoire (Let's Encrypt)
+projectService.js : getProjects(), createProject(), updateProject(),
+deleteProject(), addMember()
+•
+taskService.js : getTasks(), createTask(), updateTask(),
+deleteTask(), updateStatus()
+•
+4.3.4 Responsive Design
+4.4 Environnement et Déploiement
+Variables d'environnement :
+Backend (.env Laravel) :
+APP_URL=https://api.taskflow.com
+DB_HOST=localhost
+DB_DATABASE=taskflow
+DB_USERNAME=root
+DB_PASSWORD=secret
+SANCTUM_STATEFUL_DOMAINS=taskflow.com
+Frontend (.env React) :
+VITE_API_URL=https://api.taskflow.com/api
+Palette de couleurs :
+Primaire : #3B82F6 (bleu)
+Secondaire : #10B981 (vert)
+Danger : #EF4444 (rouge)
+Warning : #F59E0B (orange)
+Neutre : #6B7280 (gris)
+Fond : #F9FAFB (gris très clair)
+Texte : #111827 (noir quasi)
+Typographie :
+Police principale : Inter ou Roboto
+Titres : Semi-bold (600)
+Texte courant : Regular (400)
+Tailles : h1 (32px), h2 (24px), h3 (20px), body (16px), small
+(14px)
+Icônes :
+Librairie : React Icons (Heroicons ou Feather Icons)
+Taille standard : 20px, 24px pour headers
+5. Interface Utilisateur (UI/UX)
+5.1 Charte Graphique
+Page de connexion :
+Logo centré en haut
+Formulaire : email, mot de passe, bouton "Se connecter"
+Lien "Mot de passe oublié ?" sous le formulaire
+Lien "Pas encore de compte ? S'inscrire" en bas
+Dashboard :
+Header avec logo, barre de recherche, notifications (icône),
+avatar utilisateur
+Sidebar gauche : Accueil, Mes projets, Mes tâches, Profil
+Contenu principal : Widgets (statistiques), liste des projets
+récents
+Page Projet (vue Kanban) :
+Breadcrumb : Accueil > Mes projets > [Nom du projet]
+Header du projet : Nom, description, boutons (Modifier, Archiver,
+Paramètres)
+Tabs : Kanban | Liste | Membres | Activité (optionnel v2)
+Kanban : 3 colonnes avec cards drag & drop
+Bouton "Nouvelle tâche" flottant (FAB en bas à droite)
+Modal Création de tâche :
+Champs : Titre, Description, Statut, Priorité, Date limite, Assigné à
+Boutons : Annuler (gris), Créer (bleu)
+Principes UX :
+Navigation intuitive avec maximum 3 clics pour atteindre une
+fonctionnalité
+Feedback immédiat après chaque action (toast notifications)
+États de chargement visibles (spinners, skeletons)
+Messages d'erreur clairs et constructifs
+Accessibilité (WCAG 2.1 niveau A) :
+5.2 Wireframes et Parcours Utilisateur
+5.3 Ergonomie et Accessibilité
+Contrastes de couleurs respectés (ratio 4.5:1 minimum)
+Navigation au clavier possible (tabulation, Enter, Esc)
+Labels sur tous les champs de formulaire
+Attributs ARIA sur les composants interactifs
+Textes alternatifs sur les images
+Frontend :
+Temps de chargement initial : < 3 secondes (3G)
+Temps de réponse interactions : < 200 ms
+Bundle size : < 500 Ko (gzipped)
+Lazy loading des composants lourds (pages)
+Backend :
+Temps de réponse API : < 500 ms pour 95% des requêtes
+Pagination systématique sur les listes (éviter N+1 queries)
+Cache sur les requêtes fréquentes (Redis optionnel v2)
+Disponibilité : 99% (tolérance : 7h de downtime par mois)
+Gestion des erreurs :
+Frontend : Gestion des erreurs réseau, affichage de messages
+utilisateur
+Backend : Logs des erreurs dans storage/logs, monitoring
+(Sentry optionnel)
+Rollback automatique des migrations en cas d'échec
+Code :
+Respect des conventions PSR-12 (PHP), ESLint/Prettier
+(JavaScript)
+Commentaires sur la logique complexe
+6. Exigences de Qualité
+6.1 Performance
+6.2 Fiabilité
+6.3 Maintenabilité
+Noms de variables et fonctions explicites en anglais
+Tests unitaires sur la logique métier (PHPUnit pour Laravel, Jest
+pour React - optionnel v1)
+Documentation :
+README.md avec instructions d'installation
+Documentation API (Postman collection ou Swagger/OpenAPI)
+Diagrammes UML (classes, séquences) en annexe
+Protection des données :
+Mots de passe hachés (bcrypt, 10 rounds minimum)
+Tokens JWT avec expiration (24h recommandé)
+Données sensibles jamais en clair dans les logs
+Prévention des attaques :
+Validation stricte des entrées (prévention XSS, SQL injection)
+Rate limiting sur les endpoints sensibles (login, register)
+Headers de sécurité (X-Frame-Options, X-Content-Type-Options)
+CORS configuré de manière restrictive
+Matériel de développement :
+Processeur : Intel i5 / Ryzen 5 minimum
+RAM : 8 Go minimum (16 Go recommandé)
+Espace disque : 10 Go libres
+Logiciels requis :
+PHP 8.2+
+Composer 2.x
+Node.js 18.x+, npm/yarn
+MySQL 8.0+ ou PostgreSQL 13+
+Git pour versioning
+6.4 Sécurité
+7. Contraintes et Dépendances
+7.1 Contraintes Techniques
+Navigateurs supportés :
+Chrome 100+
+Firefox 95+
+Safari 15+
+Edge 100+
+Backend (composer.json) :
+laravel/framework: ^11.0
+laravel/sanctum: ^4.0 (ou tymon/jwt-auth)
+spatie/laravel-query-builder (filtrage avancé - optionnel)
+Frontend (package.json) :
+react: ^18.2
+react-router-dom: ^6.8
+axios: ^1.3
+tailwindcss: ^3.3 (ou @mui/material: ^5.11)
+react-beautiful-dnd ou @dnd-kit/core (drag & drop)
+react-hot-toast (notifications)
+Risque 1 : Complexité du drag & drop
+Impact : Retard développement, bugs
+Mitigation : Utiliser une librairie éprouvée (react-beautiful-dnd),
+tests manuels intensifs
+Risque 2 : Gestion des permissions
+Impact : Failles de sécurité (accès non autorisé aux projets)
+Mitigation : Middleware Laravel strict, tests de sécurité, revue de
+code
+Risque 3 : Performance avec nombreuses tâches
+Impact : Interface lente, mauvaise UX
+Mitigation : Pagination côté serveur, lazy loading, virtualization
+(react-window)
+7.2 Dépendances Externes
+7.3 Risques et Mitigation
+Risque 4 : Déploiement et configuration serveur
+Impact : Application inaccessible, erreurs production
+Mitigation : Documentation détaillée, tests sur environnement
+de staging, utilisation de Docker
+Phase 1 : Initialisation (Semaine 1)
+Finalisation du cahier des charges
+Configuration des environnements de développement
+Initialisation des dépôts Git (GitHub/GitLab)
+Création des maquettes Figma (wireframes haute fidélité)
+Phase 2 : Backend - Fondations (Semaines 2-3)
+Création des migrations et modèles Eloquent
+Mise en place de l'authentification (Sanctum/JWT)
+Développement des endpoints CRUD projets
+Seeders et factories pour tests
+Phase 3 : Backend - Tâches et Logique (Semaine 4)
+Développement des endpoints CRUD tâches
+Gestion des relations et permissions
+Middleware de sécurité
+Tests API avec Postman
+Phase 4 : Frontend - Base (Semaines 5-6)
+Configuration React + Vite + Tailwind
+Mise en place du routing et Context API
+Pages d'authentification (Login, Register)
+Composants layout (Header, Sidebar)
+Phase 5 : Frontend - Fonctionnalités (Semaines 7-8)
+Dashboard et liste des projets
+Formulaires création/modification projets
+8. Planning et Jalons
+8.1 Phases du Projet
+Page détail projet avec onglets
+Composants tâches (cards, formulaires)
+Phase 6 : Frontend - Kanban et Interactions (Semaine 9)
+Implémentation du Kanban board
+Drag & drop fonctionnel
+Filtres et recherche
+Page "Mes tâches"
+Phase 7 : Intégration et Tests (Semaine 10)
+Tests d'intégration frontend-backend
+Corrections de bugs
+Tests utilisateurs (feedback de 3-5 testeurs)
+Optimisations performance
+Phase 8 : Déploiement et Documentation (Semaine 11)
+Configuration serveur de production
+Déploiement backend (API)
+Déploiement frontend (static hosting)
+Rédaction documentation technique
+Vidéo de démonstration (5 min)
+Phase 9 : Clôture (Semaine 12)
+Livraison finale
+Présentation du projet (soutenance)
+Retours d'expérience et améliorations futures
+8.2 Livrables
+Livrable Description Échéance
+Cahier des charges Document présent (PDF) Semaine 1
+Maquettes Figma Wireframes haute fidélité Semaine 1
+API fonctionnelle
+Endpoints testés
+(Postman)
+Semaine 4
+MVP Frontend
+Auth + Dashboard +
+Projets
+Semaine 6
+Application complète Toutes fonctionnalités V1 Semaine 9
+Application déployée
+URL production
+accessible
+Semaine
+11
+Documentation
+technique
+README + API docs
+Semaine
+11
+Vidéo démo Présentation 5 min
+Semaine
+12
+Table 1: Planning des livrables principaux
+Équipe de développement :
+1 Développeur Full Stack (vous) : 12 semaines à temps partiel
+(20h/semaine)
+Mentor/Formateur OFPPT : Revues de code et conseils
+(2h/semaine)
+Développement :
+Ordinateur personnel (déjà disponible)
+Serveur de développement local (Docker/Laravel Sail - gratuit)
+Hébergement (production) :
+Option 1 : DigitalOcean Droplet (6
+/an)
+9. Budget et Ressources
+9.1 Ressources Humaines
+9.2 Ressources Matérielles
+Option 2 : Vercel (frontend gratuit) + Railway/Render (backend
+gratuit tier) + domaine
+Total estimé : 0-100$ pour 1 an
+Outils gratuits :
+VS Code, Postman, Git, Figma (plan gratuit)
+Librairies open source (React, Laravel, Tailwind)
+Coûts optionnels :
+Domaine personnalisé : ~12$/an
+Certificat SSL : Gratuit (Let's Encrypt)
+Services tiers (email transactionnel, monitoring) : Gratuit (tiers
+gratuits disponibles)
+Budget total estimé : 0-150$ sur 12 mois
+Scénarios de test à valider :
+1. Inscription d'un nouvel utilisateur et vérification email en BDD
+2. Connexion avec identifiants valides et obtention du token
+3. Tentative de connexion avec mot de passe incorrect (échec
+attendu)
+4. Création d'un projet et vérification de l'appartenance
+automatique
+5. Ajout d'un membre à un projet et vérification des permissions
+6. Création de 10 tâches dans un projet et affichage Kanban
+7. Changement de statut d'une tâche par drag & drop
+8. Modification d'une tâche existante et persistance des données
+9. Suppression d'une tâche avec confirmation
+10. Filtrage des tâches par statut et priorité
+11. Accès à "Mes tâches" et affichage correct des tâches assignées
+12. Tentative d'accès à un projet non autorisé (403 attendu)
+13. Déconnexion et redirection vers page de login
+9.3 Coûts Logiciels
+10. Critères de Validation et Recette
+10.1 Tests Fonctionnels
+14. Upload et affichage de photo de profil
+15. Changement de mot de passe avec validation
+Métriques à respecter :
+Chargement de la liste de 100 projets : < 1 seconde
+Affichage d'un Kanban avec 50 tâches : < 2 secondes
+Création d'une tâche : réponse API < 300 ms
+Navigation entre pages : transition instantanée (< 100 ms)
+Vérifications obligatoires :
+Tentative d'accès à /api/projects sans token → 401 Unauthorized
+Tentative de modification d'un projet d'un autre utilisateur →
+403 Forbidden
+Injection SQL via champs de formulaire → Échec (requête
+bloquée)
+XSS via description de tâche → Code échappé (non exécuté)
+CSRF token vérifié sur toutes les requêtes POST/PUT/DELETE
+Protocole de test :
+Recrutement de 3-5 testeurs (collègues OFPPT, famille, amis)
+Scénario guidé : "Créez un projet, ajoutez 3 tâches, déplacez-les,
+modifiez-en une"
+Questionnaire post-test : Facilité d'utilisation (1-5), design (1-5),
+bugs rencontrés, suggestions
+Intégration des retours critiques avant livraison finale
+L'application est considérée comme validée si :
+✅ Tous les tests fonctionnels (15 scénarios) passent
+✅ Aucun bug bloquant en production
+✅ Performance respecte les métriques définies
+10.2 Tests de Performance
+10.3 Tests de Sécurité
+10.4 Tests Utilisateurs
+10.5 Critères d'Acceptation
+✅ Tests de sécurité validés (0 faille critique)
+✅ Note moyenne utilisateurs ≥ 4/5
+✅ Documentation technique complète et à jour
+✅ Application accessible via URL publique HTTPS
+Maintenance corrective (post-livraison) :
+Suivi des bugs remontés via GitHub Issues
+Correctifs prioritaires déployés sous 48h (bugs critiques)
+Correctifs mineurs déployés sous 7 jours
+Maintenance évolutive :
+Plan de nouvelles fonctionnalités (voir V2)
+Mises à jour de sécurité (Laravel, React, dépendances) :
+trimestrielles
+Priorité haute :
+Notifications temps réel (WebSockets avec Laravel Echo +
+Pusher)
+Système de commentaires sur les tâches
+Pièces jointes sur les tâches (upload de fichiers)
+Historique des modifications (audit log)
+Recherche globale (projets + tâches)
+Priorité moyenne :
+Vue calendrier des tâches avec deadlines
+Système de tags/labels personnalisables
+Export de données (PDF, Excel)
+Statistiques avancées (graphiques de productivité)
+Mode sombre (dark mode)
+Priorité basse :
+11. Maintenance et Évolutions Futures
+11.1 Support et Maintenance
+11.2 Fonctionnalités V2 (Évolutions futures)
+Intégrations tierces (Slack, Google Calendar, Trello import)
+Application mobile React Native
+API publique pour extensions
+Système de templates de projets
+Gamification (badges, points)
+[1] Manager-Go. (2023). Exemple de cahier des charges pour un projet
+simple. https://www.manager-go.com/gestion-de-projet/dossiers-meth
+odes/elaborer-un-cdc
+[2] Appvizer. (2025). Comment faire un cahier des charges ? Étapes,
+modèle et exemple. https://www.appvizer.fr/magazine/operations/ges
+tion-de-projet/cahier-des-charges
+[3] Blog Gestion de Projet. (2026). Cahier des charges : comment le
+rédiger + modèle (8 étapes). https://blog-gestion-de-projet.com/cahierdes-charges-projet/
+12. Annexes
+12.1 Glossaire
+API REST : Interface de programmation permettant la
+communication entre frontend et backend via HTTP
+•
+CRUD : Create, Read, Update, Delete - Opérations de base sur les
+données
+•
+• JWT : JSON Web Token - Standard d'authentification par token
+• Kanban : Méthode de gestion visuelle des tâches en colonnes
+Middleware : Couche logicielle intermédiaire filtrant les
+requêtes
+•
+SPA : Single Page Application - Application web monopage
+dynamique
+•
+Token : Jeton d'authentification prouvant l'identité de
+l'utilisateur
+•
+Drag & Drop : Glisser-déposer - Interaction utilisateur pour
+déplacer des éléments
+•
+12.2 Références Bibliographiques
+[4] Axopen. (2025). Comment faire le cahier des charges d'une
+application métier. https://www.axopen.com/blog/2025/02/cahier-descharges-application-metier-modele/
+[5] Glowbl. (2024). Le cahier des charges : Guide complet pour réussir
+vos projets. https://www.glowbl.com/blog/cahier-des-charges/
+[6] Softyflow. (2025). Spécifications de projet : rédaction claire et
+efficace. https://www.softyflow.io/specifications-projet/
+[7] HubSpot. (2025). Comment faire le cahier des charges d'une
+application mobile ? https://blog.hubspot.fr/website/cahier-des-charge
+s-application-mobile
+À produire en parallèle du développement :
+Maquettes Figma (wireframes + prototypes interactifs)
+Diagramme UML des classes (modèles Laravel)
+Diagramme de séquence (flux authentification, création de
+tâche)
+Schéma de base de données (relations entre tables)
+Collection Postman (documentation API)
+Guide d'installation (README.md détaillé)
+User Stories détaillées (format Agile)
+Chef de projet / Développeur :
+Nom : [Votre nom]
+Email : [Votre email]
+GitHub : [Lien profil GitHub]
+Encadrant OFPPT :
+Nom : [Nom formateur]
+Email : [Email formateur]
+Disponibilité : [Créneaux horaires]
+Testeurs utilisateurs :
+12.3 Documents Complémentaires
+12.4 Contacts et Intervenants
+À définir (collègues de formation, amis)
+Ce cahier des charges définit l'intégralité des spécifications
+fonctionnelles, techniques et organisationnelles pour la réalisation de
+l'application TaskFlow. Le projet permet de démontrer une maîtrise
+complète du stack React + Laravel, de l'architecture API REST, ainsi
+que des bonnes pratiques de développement full stack[2][3][4].
+Le planning établi sur 12 semaines est ambitieux mais réaliste pour
+un projet de formation, avec une phase de développement itérative
+permettant de livrer un MVP fonctionnel dès la semaine 6, puis
+d'enrichir progressivement les fonctionnalités[5].
+Les critères de validation clairement définis garantissent la qualité du
+livrable final, tandis que les évolutions V2 proposées offrent des
+perspectives d'amélioration continue du projet au-delà de la
+soutenance[6].
+Ce projet constitue un excellent ajout à un portfolio de
+développeur full stack débutant, démontrant des compétences
+recherchées par les entreprises : architecture moderne, sécurité,
+UX soignée et code maintenable.
+Signature et Approbation :
+Développeur : ________________________
+Date : //2026
+Encadrant OFPPT : ________________________
+Date : //2026
+Fin du document - Version 1.0
+Total pages : 15 | Total mots : ~6500
+Conclusion

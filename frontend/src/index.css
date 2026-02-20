@@ -1,0 +1,211 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+@layer components {
+  .task-calendar,
+  .task-calendar * {
+    box-sizing: border-box;
+  }
+
+  .task-calendar .rbc-calendar {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .task-calendar .rbc-month-view,
+  .task-calendar .rbc-time-view,
+  .task-calendar .rbc-agenda-view {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .task-calendar .rbc-month-row {
+    overflow: hidden;
+  }
+
+  .task-calendar .rbc-day-bg {
+    transition: background-color 0.15s ease;
+  }
+
+  .task-calendar .rbc-day-bg:hover {
+    background-color: rgba(59, 130, 246, 0.08);
+    cursor: pointer;
+  }
+
+  .task-calendar .calendar-off-month {
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
+  .task-calendar .calendar-today {
+    background-color: rgba(59, 130, 246, 0.16);
+    box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.45);
+  }
+
+  .task-calendar .rbc-date-cell {
+    padding-right: 8px;
+  }
+
+  .task-calendar .calendar-today .rbc-button-link {
+    color: #2563eb;
+    font-weight: 700;
+  }
+
+  .task-calendar .rbc-event {
+    min-height: 22px;
+    margin-top: 2px;
+    padding: 2px 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .task-calendar .rbc-show-more {
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .task-calendar .rbc-toolbar-label {
+    letter-spacing: 0.01em;
+  }
+
+  .rbc-toolbar button {
+    border-color: #cbd5e1;
+    color: #0f172a;
+    background-color: #ffffff;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .rbc-toolbar button:hover {
+    background-color: #f1f5f9;
+  }
+
+  /* Calendar Dark Mode Overrides */
+  .dark .rbc-calendar {
+    color: #e5e7eb;
+  }
+
+  .dark .rbc-off-range-bg {
+    background-color: #1f2937;
+    /* gray-800 */
+  }
+
+  .dark .rbc-off-range {
+    color: #4b5563;
+    /* gray-600 */
+  }
+
+  .dark .rbc-header {
+    border-bottom-color: #374151;
+    /* gray-700 */
+  }
+
+  .dark .rbc-month-view,
+  .dark .rbc-time-view,
+  .dark .rbc-agenda-view {
+    border-color: #374151;
+  }
+
+  .dark .rbc-time-content,
+  .dark .rbc-time-header-content,
+  .dark .rbc-timeslot-group,
+  .dark .rbc-time-gutter,
+  .dark .rbc-time-header,
+  .dark .rbc-time-slot,
+  .dark .rbc-agenda-content,
+  .dark .rbc-agenda-table,
+  .dark .rbc-agenda-table tbody > tr > td {
+    border-color: #374151;
+    color: #e5e7eb;
+  }
+
+  .dark .rbc-agenda-table thead > tr > th {
+    color: #d1d5db;
+    border-color: #374151;
+  }
+
+  .dark .rbc-month-row,
+  .dark .rbc-day-bg {
+    border-color: #374151;
+  }
+
+  .dark .rbc-today {
+    background-color: rgba(59, 130, 246, 0.1);
+    /* blue-500 with opacity */
+  }
+
+  /* Toolbar Buttons */
+  .dark .rbc-toolbar button {
+    color: #e5e7eb;
+    border-color: #4b5563;
+  }
+
+  .dark .rbc-toolbar button:hover {
+    background-color: #374151;
+  }
+
+  .dark .rbc-toolbar button.rbc-active {
+    background-color: #2563eb;
+    /* blue-600 */
+    border-color: #2563eb;
+    color: white;
+  }
+
+  .dark .rbc-toolbar button.rbc-active:hover {
+    background-color: #1d4ed8;
+    /* blue-700 */
+  }
+
+  .dark .rbc-show-more {
+    background-color: transparent;
+    color: #60a5fa;
+    /* blue-400 */
+  }
+
+  .dark .task-calendar .rbc-day-bg:hover {
+    background-color: rgba(59, 130, 246, 0.12);
+  }
+
+  .dark .task-calendar .calendar-off-month {
+    opacity: 0.35;
+  }
+
+  .dark .task-calendar .calendar-today {
+    background-color: rgba(59, 130, 246, 0.2);
+    box-shadow: inset 0 0 0 1px rgba(96, 165, 250, 0.5);
+  }
+
+  .dark .task-calendar .calendar-today .rbc-button-link {
+    color: #93c5fd;
+  }
+
+  .rbc-toolbar {
+    gap: 0.5rem;
+  }
+
+  .rbc-toolbar .rbc-btn-group {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .rbc-toolbar button {
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+}
